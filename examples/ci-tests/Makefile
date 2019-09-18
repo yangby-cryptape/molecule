@@ -5,5 +5,5 @@ debug:
 	@cargo build
 
 test:
-	@cargo run
 	@cargo test --all
+	@cargo run

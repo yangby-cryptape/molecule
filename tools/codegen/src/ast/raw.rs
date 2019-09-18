@@ -1,11 +1,11 @@
 #[derive(Debug)]
-pub(crate) struct FieldDecl {
-    pub(crate) name: String,
+pub(crate) struct ItemDecl {
     pub(crate) typ: String,
 }
 
 #[derive(Debug)]
-pub(crate) struct ItemDecl {
+pub(crate) struct FieldDecl {
+    pub(crate) name: String,
     pub(crate) typ: String,
 }
 
@@ -56,10 +56,6 @@ pub(crate) enum TopDecl {
     Table(TableDecl),
 }
 
-pub(crate) trait IsTopDecl: Into<TopDecl> {
-    fn name(&self) -> &str;
-}
-
 #[derive(Debug)]
 pub(crate) struct ImportStmt {
     pub(crate) name: String,
@@ -73,14 +69,8 @@ pub(crate) struct Ast {
     pub(crate) decls: Vec<TopDecl>,
 }
 
-macro_rules! impl_top_decl_for {
+macro_rules! impl_into_top_decl_for {
     ($item:ident, $decl:ident) => {
-        impl IsTopDecl for $decl {
-            fn name(&self) -> &str {
-                &self.name
-            }
-        }
-
         impl From<$decl> for TopDecl {
             fn from(decl: $decl) -> Self {
                 TopDecl::$item(decl)
@@ -89,12 +79,30 @@ macro_rules! impl_top_decl_for {
     };
 }
 
-impl_top_decl_for!(Option_, OptionDecl);
-impl_top_decl_for!(Union, UnionDecl);
-impl_top_decl_for!(Array, ArrayDecl);
-impl_top_decl_for!(Struct, StructDecl);
-impl_top_decl_for!(Vector, VectorDecl);
-impl_top_decl_for!(Table, TableDecl);
+impl_into_top_decl_for!(Option_, OptionDecl);
+impl_into_top_decl_for!(Union, UnionDecl);
+impl_into_top_decl_for!(Array, ArrayDecl);
+impl_into_top_decl_for!(Struct, StructDecl);
+impl_into_top_decl_for!(Vector, VectorDecl);
+impl_into_top_decl_for!(Table, TableDecl);
+
+macro_rules! impl_methods_for_decl {
+    ($decl:ident) => {
+        impl $decl {
+            pub(crate) fn name(&self) -> &str {
+                &self.name
+            }
+        }
+    };
+}
+
+impl_methods_for_decl!(FieldDecl);
+impl_methods_for_decl!(OptionDecl);
+impl_methods_for_decl!(UnionDecl);
+impl_methods_for_decl!(ArrayDecl);
+impl_methods_for_decl!(StructDecl);
+impl_methods_for_decl!(VectorDecl);
+impl_methods_for_decl!(TableDecl);
 
 impl TopDecl {
     pub(crate) fn name(&self) -> &str {
@@ -114,7 +122,7 @@ impl Ast {
         self.imports.push(stmt);
     }
 
-    pub(crate) fn add_decl(&mut self, decl: impl IsTopDecl) {
+    pub(crate) fn add_decl(&mut self, decl: impl Into<TopDecl>) {
         self.decls.push(decl.into());
     }
 }

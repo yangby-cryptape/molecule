@@ -1,7 +1,6 @@
 use codegen::{Compiler, Language};
 
-fn main() {
-    let schema = "schemas/ci_tests.mol";
+fn compile_schema(schema: &str) {
     let mut compiler = Compiler::new();
     compiler
         .language(Language::Rust)
@@ -14,4 +13,8 @@ fn main() {
         .file_path(schema)
         .run();
     println!("cargo:rerun-if-changed={}", schema);
+}
+
+fn main() {
+    compile_schema("schemas/ci_tests.mol");
 }

@@ -9,3 +9,6 @@ molecule = { path = "../../bindings/rust" }
 
 [build-dependencies]
 codegen = { package ="molecule-codegen", path = "../../tools/codegen" }
+
+[dev-dependencies]
+slices = "~0.1"
