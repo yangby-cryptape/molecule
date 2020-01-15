@@ -30,8 +30,8 @@ where
             #definition
 
             impl #builder {
-                #( #constants )*
-                #( #setters )*
+                #constants
+                #setters
             }
 
             #implementation

@@ -11,6 +11,7 @@ pub(in super::super) trait GenEnumerator {
 }
 
 impl GenEnumerator for ast::Union {
+    #[allow(clippy::cognitive_complexity)]
     fn gen_enumerator(&self) -> m4::TokenStream {
         let entity_union = entity_union_name(self.name());
         let reader_union = reader_union_name(self.name());
