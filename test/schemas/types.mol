@@ -165,6 +165,7 @@ vector ByteOptVec <ByteOpt>;
 vector WordOptVec <WordOpt>;
 vector WordsOptVec <WordsOpt>;
 vector BytesOptVec <BytesOpt>;
+vector Table0Vec <Table0>;
 
 union UnionA {
     byte,

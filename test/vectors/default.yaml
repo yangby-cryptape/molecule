@@ -165,6 +165,9 @@
 -
   name: BytesOptVec
   expected: "0x04000000"
+-
+  name: Table0Vec
+  expected: "0x04000000"
 #
 # Table
 #
