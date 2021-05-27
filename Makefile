@@ -1,7 +1,8 @@
-ci: ci-examples ci-crates
+ci:
+	@set -eu; \
 	export RUSTFLAGS='-D warnings'; \
-	make ci-examples; \
-	make ci-crates; \
+	make fmt clippy; \
+	make ci-examples ci-crates; \
 	echo "Success!"
 
 RUST_PROJS = examples/ci-tests bindings/rust tools/codegen tools/compiler

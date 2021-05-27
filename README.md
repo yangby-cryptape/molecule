@@ -1,12 +1,12 @@
 # Molecule
 
 [![License]](#license)
-[![Travis CI]](https://travis-ci.com/nervosnetwork/molecule)
+[![GitHub Actions]](https://github.com/yangby-cryptape/molecule/actions)
 
 Another serialization system: minimalist and canonicalization.
 
 [License]: https://img.shields.io/badge/License-MIT-blue.svg
-[Travis CI]: https://img.shields.io/travis/com/nervosnetwork/molecule.svg
+[GitHub Actions]: https://github.com/yangby-cryptape/molecule/workflows/CI/badge.svg
 
 ## Documents
 
