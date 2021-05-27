@@ -1,5 +1,8 @@
-ci: ci-example ci-crates
-	git diff --exit-code tools/compiler/Cargo.lock
+ci: ci-examples ci-crates
+	export RUSTFLAGS='-D warnings'; \
+	make ci-examples; \
+	make ci-crates; \
+	echo "Success!"
 
 RUST_PROJS = examples/ci-tests bindings/rust tools/codegen tools/compiler
 C_PROJS = examples/ci-tests
@@ -36,16 +39,15 @@ clippy:
 
 ci-crates:
 	@set -eu; \
-	export RUSTFLAGS='-D warnings'; \
 	for dir in ${RUST_PROJS}; do \
 		cd "$${dir}"; \
 		cargo clean; \
 		cargo test --all --verbose; \
 		cd - > /dev/null; \
-	done
+	done; \
+	git diff --exit-code tools/compiler/Cargo.lock
 
-ci-example:
+ci-examples:
 	@set -eu; \
-	export RUSTFLAGS='-D warnings'; \
 	cd examples/ci-tests; \
 	make clean test

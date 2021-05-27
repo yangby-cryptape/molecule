@@ -1,0 +1,102 @@
+name: CI
+on:
+  push:
+    branches: [ master, develop, staging, trying ]
+  pull_request:
+    branches: [ master ]
+defaults:
+  run:
+    shell: bash
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+  RUST_BACKTRACE: full
+jobs:
+  rustfmt:
+    name: Checks / Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.52.1
+          override: true
+          components: rustfmt
+      - name: Run
+        run: make fmt
+  clippy:
+    name: Checks / Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.52.1
+          override: true
+          components: clippy
+      - name: Run
+        run: make clippy
+  test-crates:
+    name: Tests / Build & Test
+    needs: [ rustfmt, clippy ]
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        rust: stable
+        include:
+          - os: ubuntu-latest
+            rust: 1.41.0  # MSRV
+      fail-fast: true
+      max-parallel: 4
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+      - name: Run
+        run: make ci-crates
+  test-examples:
+    name: Tests / Run Examples
+    needs: [ rustfmt, clippy ]
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        rust: stable
+        include:
+          - os: ubuntu-latest
+            rust: 1.41.0  # MSRV
+      fail-fast: true
+      max-parallel: 4
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+      - name: Run
+        run: make ci-examples
+  success:
+    name: Success
+    if: ${{ success() }}
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Succeed
+        run: exit 0
