@@ -2,7 +2,7 @@ use crate::ast::{self, HasName as _};
 
 pub(crate) trait ToIntermediate {
     type Ir;
-    fn to_ir(self: &Self) -> Self::Ir;
+    fn to_ir(&self) -> Self::Ir;
 }
 
 impl ToIntermediate for ast::Ast {

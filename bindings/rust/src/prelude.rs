@@ -14,6 +14,7 @@ pub trait Entity: fmt::Debug + Default + Clone {
     fn from_slice(slice: &[u8]) -> VerificationResult<Self>;
     fn from_compatible_slice(slice: &[u8]) -> VerificationResult<Self>;
     fn new_builder() -> Self::Builder;
+    #[allow(clippy::wrong_self_convention)]
     fn as_builder(self) -> Self::Builder;
 }
 

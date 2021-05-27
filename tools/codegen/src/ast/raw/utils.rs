@@ -101,14 +101,17 @@ impl<'i> utils::PairsUtils for Pairs<'i, parser::Rule> {
 
 impl utils::ParserUtils for parser::Parser {
     fn preprocess<P: AsRef<Path>>(path: &P) -> Result<ast::Ast, PestError<parser::Rule>> {
-        let mut ast = ast::Ast::default();
-
-        ast.namespace = path
+        let namespace = path
             .as_ref()
             .file_stem()
             .and_then(ffi::OsStr::to_str)
             .unwrap()
             .to_owned();
+
+        let mut ast = ast::Ast {
+            namespace,
+            ..Default::default()
+        };
 
         let mut imported_depth = 0;
 

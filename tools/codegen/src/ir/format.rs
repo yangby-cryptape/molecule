@@ -1,3 +1,5 @@
+#![allow(clippy::upper_case_acronyms)]
+
 use std::{convert::TryFrom, fmt, io, str};
 
 use crate::ast;
